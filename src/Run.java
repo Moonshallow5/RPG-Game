@@ -7,7 +7,7 @@ public class Run {
         Archer archer1=new Archer(4,1,0,'A');
     
         Knight knight1=new Knight(10,10,0,'K');
-        Knight knight2=new Knight(10,1,5,'K');
+        Knight knight2=new Knight(2,1,5,'K');
         //Archer archer6=new Archer(4,1,4,'A');
         //Archer archer7=new Archer(4,1,4,'A');
         //Archer archer8=new Archer(4,1,1,'A');
@@ -24,8 +24,8 @@ public class Run {
         boards.pick(knight1);
         boards.pick(archer);
         boards.pick(archer3);
-        boards.pick(knight2);
         boards.pick(archer9);
+        boards.pick(knight2);
         /*boards.pick(archer6);
         boards.pick(archer7);
         boards.pick(knight2);

@@ -118,8 +118,8 @@ public class Board {
     public void knightFirst1(){
         if(arrayList.size()>=6){
             if (getHeroes(i).Character == 'K') {
-                System.out.println("cp");
-                System.out.println(getHeroes(i).Position);
+               
+                
                 if ((board[i][getHeroes(i).Position + 1] == 'A' || board[i][getHeroes(i).Position + 1] == 'K') && (getHeroes(i + 3).Health > 0 ) && getHeroes(i).Health > 0) {//FIRST
                         getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
                     System.out.println("ll");
