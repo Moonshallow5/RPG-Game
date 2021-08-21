@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 public class Board {
     char[][] board=new char[3][6];
 
@@ -14,25 +15,26 @@ public class Board {
             heroesHashMap.put(count, heroess);
             arrayList.add(heroess);
             count++;
-            System.out.println(heroesHashMap);
+            //System.out.println(heroesHashMap);
             //System.out.println(arrayList);
         }
+        System.out.println(heroesHashMap);
     }
-    /*public void pickSecond(){
+   /*public void starting(){
         Scanner scanner=new Scanner(System.in);
-        System.out.println("Choose 3 characters between archer and knight for the end of the board");
-        System.out.println(pickKnightOrArcher());
-        for (int i = 0; i < 3; i++) {
-            int x=scanner.nextInt();
-            if(x==1){
-                countArcherEnd++;
+        System.out.println("Would you want to play 1v1 or 2v2 enter 1 for 1v1 and 2 for 2v2");
+        int x=scanner.nextInt();
+        if(x==2){
+            for (int j = 0; j < 5;j++) {
+                System.out.println("Enter your heroes");
+                pick(new  Archer(5,5,0,'A'));
             }
-            else if(x==2){
-                countKnightEnd++;
-            }
-            heroesend.add(x);
+            insert();
+            displayBoard();
+            start();
         }
     }*/
+    
     public final void displayBoard() {
         String rowDivider = "-".repeat(4 * board[0].length + 1);
         System.out.println(rowDivider);
@@ -54,68 +56,28 @@ public class Board {
         }
     }
 
-    /*public void insert(){
-        Scanner scanner=new Scanner(System.in);
-        if(heroes.contains(1)) {
-            while (countArcher > 0) {
-                System.out.println("Where would you lime place the archer");
-                System.out.println("Choose a number between 0 and 2");
-                int archer = scanner.nextInt();
-                board[archer][0] = 'A';
-                countArcher--;
-            }
-        }if(heroes.contains(2)){
-            while (countKnight>0){
-                System.out.println("Where would you lime place the knight");
-                System.out.println("Choose a number between 0 and 2");
-                int knight = scanner.nextInt();
-                board[knight][0] = 'K';
-                countKnight--;
-
-            }
-        }
-    }
-    public void insertSecond(){
-        Scanner scanner=new Scanner(System.in);
-        System.out.println(heroesend);
-        if(heroesend.contains(1)) {
-            while (countArcherEnd > 0) {
-                System.out.println("Where would you lime place the archer end of board");
-                System.out.println("Choose a number between 0 and 2");
-                int archer = scanner.nextInt();
-                board[archer][5] = 'A';
-                countArcherEnd--;
-            }
-        }if(heroesend.contains(2)){
-            while (countKnightEnd>0){
-                System.out.println("Where would you lime place the knight end of board");
-                System.out.println("Choose a number between 0 and 2");
-                int knight = scanner.nextInt();
-                board[knight][5] = 'K';
-                countKnightEnd--;
-
-            }
-        }
-
-    }*/
-
     int couunt1=0;
+    int two=0;
+    int three=0;
     public void insert(){
         for (int i = 0; i < arrayList.size(); i++) {
-                if(arrayList.get(i) instanceof Archer) {
+            System.out.println(arrayList.size());
+                if(arrayList.get(i) instanceof Archer|| arrayList.get(i)instanceof Knight) {
                     //System.out.println("cool");
-                    if(i>=3){
-                        board[couunt1][5]=getHeroes(i).Character;
+                    if(i>=3 && i<6){
+                        board[couunt1][getHeroes(i).Position]=getHeroes(i).Character;
                         couunt1++;
-                    }else {
-                        board[i][0] = getHeroes(i).Character;
                     }
-                }else if(arrayList.get(i) instanceof Knight){
-                    if(i>=3){
-                        board[couunt1][5]=getHeroes(i).Character;
-                        couunt1++;
-                    }else {
-                        board[i][0] = getHeroes(i).Character;
+                    else if(i>=6 && i<9){
+                        board[two][getHeroes(i).Position]=getHeroes(i).Character;
+                        two++;
+                    }
+                    else if(i>=9){
+                        board[three][getHeroes(i).Position]=getHeroes(i).Character;
+                        three++;
+                    }
+                    else {
+                        board[i][getHeroes(i).Position] = getHeroes(i).Character;
                     }
                 }
             }
@@ -124,94 +86,160 @@ public class Board {
     public Heroes getHeroes(int row){
         return heroesHashMap.get(row);
     }
+   
+    public void archerFirst1(){
+        if(arrayList.size()==6){
+            int why=0;
+            int j=1;
+            if (getHeroes(i).Character == 'A' && getHeroes(i).Health > 0 && (getHeroes(i + 3).Health > 0)) {//FIRST
+                while (why != (getHeroes(i + 3).Position - 1)) {
+                    board[i][getHeroes(i).Position + j] = '>';
+                    if (j != 1) {
+                        board[i][getHeroes(i).Position + (j - 1)] = ' ';
+                    }
+                    displayBoard();
+                    why++;
+                    j++;
+                }
+                board[i][getHeroes(i + 3).Position - 1] = ' ';
+                getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
+                System.out.println(i + " attacked " + (i + 3));
+                System.out.println((i + 3) + " health is " + getHeroes(i + 3).Health);
+            }
+            if (getHeroes(i + 3).Health <= 0) {
+                getHeroes(i).Health = getHeroes(i).Health + 2;
+                getHeroes(i + 3).Damage = 0;
+                board[i][getHeroes(i + 3).Position] = ' ';
+                displayBoard();
+            }
+        }
+    }
+
+    public void knightFirst1(){
+        if(arrayList.size()>=6){
+            if (getHeroes(i).Character == 'K') {
+                System.out.println("cp");
+                System.out.println(getHeroes(i).Position);
+                if ((board[i][getHeroes(i).Position + 1] == 'A' || board[i][getHeroes(i).Position + 1] == 'K') && (getHeroes(i + 3).Health > 0 ) && getHeroes(i).Health > 0) {//FIRST
+                        getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
+                    System.out.println("ll");
+                        System.out.println(i + " attacked " + (i + 3));
+                        System.out.println((i + 3) + " Health is " + getHeroes(i + 3).Health);
+
+                } else if ((getHeroes(i + 3).Health > 0 && getHeroes(i).Health>0)) {
+                    getHeroes(i).Position++;
+                    board[i][getHeroes(i).Position] = 'K';
+                    board[i][getHeroes(i).Position - 1] = ' ';
+                    displayBoard();
+                }
+                if (getHeroes(i + 3).Health <= 0) {
+                    board[i][getHeroes(i + 3).Position] = ' ';
+                    getHeroes(i + 3).Damage = 0;
+                    board[i][getHeroes(i).Position] = 'K';
+                    displayBoard();
+                }
+
+            }
+        }
+
+
+    }
+        public void archerLastRow1(){
+        if (arrayList.size() ==6) {
+            if (getHeroes(i + 3).Character == 'A' && getHeroes(i).Health > 0 && getHeroes(i + 3).Health > 0) {//SECOND
+                    int why=getHeroes(i+3).Position;
+                    int j=1;
+                    while (why != getHeroes(i).Position+1) {
+                        board[i][getHeroes(i + 3).Position - j] = '<';
+                        if (j != 1) {
+                            board[i][getHeroes(i + 3).Position - (j - 1)] = ' ';
+                        }
+                        displayBoard();
+                        why--;
+                        j++;
+                    }
+                    if(getHeroes(i).Position+1!=getHeroes(i+3).Position) {
+                        board[i][getHeroes(i).Position + 1] = ' ';
+
+                    }
+                    getHeroes(i).Health=getHeroes(i).Health-getHeroes(i+3).Damage;
+                    System.out.println((i + 3) + " attacked " + (i));
+                    System.out.println((i) + " Health is " + getHeroes(i).Health);
+
+                }
+            if(getHeroes(i).Health<=0){
+                board[i][getHeroes(i).Position]=' ';
+                displayBoard();
+                }
+            }
+        }
+   
+    public void knightLast1(){
+        if(arrayList.size()==6){
+            if(getHeroes(i+3).Character=='K'){
+                if((board[i][getHeroes(i+3).Position-1]=='A'|| board[i][getHeroes(i + 3).Position - 1] == 'K') && getHeroes(i + 3).Health > 0 && getHeroes(i).Health > 0) {
+                    getHeroes(i).Health = getHeroes(i).Health - getHeroes(i + 3).Damage;
+                    System.out.println((i + 3) + " attacked " + (i));
+                    System.out.println((i) + " Health is " + getHeroes(i).Health);
+                    if (getHeroes(i).Health <= 0) {
+                        board[i][getHeroes(i).Position] = ' ';
+                        board[i][getHeroes(i + 3).Position] = 'K';
+                        getHeroes(i).Damage = 0;
+                        displayBoard();
+                    }
+                }else if (getHeroes(i).Health > 0 && getHeroes(i + 3).Health > 0) {
+                    getHeroes(i + 3).Position--;
+                    board[i][getHeroes(i + 3).Position] = 'K';
+                    board[i][getHeroes(i + 3).Position + 1] = ' ';
+                    displayBoard();
+                }
+            }
+        }
+
+    }
+    int i=0;
     public void start(){
-        int i=0;
-        int death1=0;
-        int death2=0;
         while (true) {
             /*if(getHeroes(i).Health<=0){
                 getHeroes(i).Damage=0;
                 board[i][0]=' ';
                 displayBoard();
             }*/
-            if(getHeroes(i).Character=='A' && (getHeroes(i+3).Health>0) && getHeroes(i).Health>0) {//FIRST
-                getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
-                System.out.println(i + " attacked " + (i + 3));
-                System.out.println((i + 3) + " health is " + getHeroes(i + 3).Health);
-                if(getHeroes(i+3).Health<=0){
-                    death1++;
-                    getHeroes(i+3).Damage=0;
-                    board[i][getHeroes(i+3).Position]=' ';
-                    displayBoard();
-                }
-            }else if(getHeroes(i).Character=='K'){
-                if((board[i][getHeroes(i).Position+1]=='A'|| board[i][getHeroes(i).Position+1]=='K') && getHeroes(i + 3).Health >0 && getHeroes(i).Health>0 ) {//FIRST
-                    getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
-                    System.out.println(i + " attacked " + (i + 3));
-                    System.out.println((i + 3) + " Health is " + getHeroes(i + 3).Health);
-                    if (getHeroes(i + 3).Health <= 0) {
-                        death1++;
-                        board[i][getHeroes(i + 3).Position] = ' ';
-                        getHeroes(i + 3).Damage = 0;
-                        board[i][getHeroes(i).Position]='K';
-                        displayBoard();
-                    }
-                }else if(getHeroes(i + 3).Health >0 && getHeroes(i).Health>0){
-                    getHeroes(i).Position++;
-                    board[i][getHeroes(i).Position]='K';
-                    board[i][getHeroes(i).Position-1]=' ';
-                    displayBoard();
-                }
-
+            if (getHeroes(0).Health <= 0 && getHeroes(1).Health<=0 && getHeroes(2).Health<=0 ) {
+                System.out.println("Second died "+i);
+                break;
             }
+            /*if(getHeroes(i+9).Character!='K') {
+                archerFirst22();
+            }*/
+            //archerFirst2();
+            knightFirst1();
+            archerFirst1();
+           // knightFirst2();
             /*if(getHeroes(i+3).Health<=0){
                 getHeroes(i+3).Damage=0;
                 board[i][5]=' ';
                 displayBoard();
             }*/
-            if (getHeroes(3).Health <= 0 && getHeroes(4).Health<=0 && getHeroes(5).Health<=0) {
-                System.out.println("Second died "+i);
-                break;
-            }if(getHeroes(i+3).Character=='A' && getHeroes(i).Health>0 && getHeroes(i+3).Health>0) {//SECOND
-                getHeroes(i).Health = getHeroes(i).Health - getHeroes(i + 3).Damage;
-                System.out.println((i + 3) + " attacked " + (i));
-                System.out.println((i) + " Health is " + getHeroes(i).Health);
-                if(getHeroes(i).Health<=0){
-                    board[i][getHeroes(i).Position]=' ';
-                    death1++;
-                    getHeroes(i).Damage=0;
-                    displayBoard();
+            if(arrayList.size()==9) {
+                if (getHeroes(3).Health <= 0 && getHeroes(4).Health <= 0 && getHeroes(5).Health <= 0 && getHeroes(6).Health <= 0 && getHeroes(7).Health <= 0 && getHeroes(8).Health <= 0) {
+                    System.out.println("Second died " + i);
+                    break;
                 }
-            }else if(getHeroes(i+3).Character=='K'){//SECOND
-                if((board[i][getHeroes(i+3).Position-1]=='A'|| board[i][getHeroes(i+3).Position-1]=='K') && getHeroes(i+3).Health>0 && getHeroes(i).Health>0) {
-                    getHeroes(i).Health = getHeroes(i).Health - getHeroes(i + 3).Damage;
-                    System.out.println((i + 3) + " attacked " + (i));
-                    System.out.println((i)+" Health is "+getHeroes(i).Health);
-                    if (getHeroes(i).Health <= 0) {
-                        board[i][getHeroes(i).Position]=' ';
-                        death1++;
-                        board[i][getHeroes(i+3).Position]='K';
-                        getHeroes(i).Damage=0;
-                        displayBoard();
-                    }
+            }else {
+                if(getHeroes(3).Health<=0 && getHeroes(4).Health<=0 && getHeroes(5).Health<=0){
+                    System.out.println("Second died "+i);
+                    break;
                 }
-                    else if(getHeroes(i).Health >0 && getHeroes(i+3).Health>0) {
-                        getHeroes(i+3).Position--;
-                        board[i][getHeroes(i+3).Position]='K';
-                        board[i][getHeroes(i+3).Position+1]=' ';
-                        displayBoard();
-                    }
-                    else if(getHeroes(i+3).Health<=0) {
-                    board[i][getHeroes(i+3).Position]=' ';
-                    }
-
             }
-            if (death1>=3) {
-                System.out.println(death1);
-                System.out.println(death2);
-                System.out.println("First died "+i);
-                break;
-            }
+            //knightSecondLastRow();
+            //archerSecondLastRow();
+           // knightLast22();
+            /*if(getHeroes(i+6).Character!='K') {
+                archerLastRow();
+            }*/
+            archerLastRow1();
+            knightLast1();
             if(i==2){
                 i=0;
             }else {
@@ -219,14 +247,362 @@ public class Board {
             }
 
         }
-
-        System.out.println(getHeroes(0).Health);
-        System.out.println(getHeroes(3).Health);
-        System.out.println(getHeroes(2).Health);
-        System.out.println(getHeroes(5).Health);
-
-
     }
 
 
+
 }
+/*public void pickSecond(){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("Choose 3 characters between archer and knight for the end of the board");
+        System.out.println(pickKnightOrArcher());
+        for (int i = 0; i < 3; i++) {
+            int x=scanner.nextInt();
+            if(x==1){
+                countArcherEnd++;
+            }
+            else if(x==2){
+                countKnightEnd++;
+            }
+            heroesend.add(x);
+        }
+    }*/
+     /*
+    public void knightFirst2(){
+        if(arrayList.size()>=9) {
+            if (getHeroes(i+9).Character == 'K') {
+                if ((board[i][getHeroes(i+9).Position + 1] == 'A' || board[i][getHeroes(i+9).Position + 1] == 'K') && (getHeroes(i + 3).Health > 0 || getHeroes(i + 6).Health > 0) && getHeroes(i+9).Health > 0) {
+                    System.out.println("knight");
+                    if (getHeroes(i + 6).Health > 0) {
+                        getHeroes(i + 6).Health = getHeroes(i + 6).Health - getHeroes(i + 9).Damage;
+                        System.out.println("why");
+                        System.out.println((i + 9) + " attacked " + (i + 6));
+                        System.out.println((i + 6) + " Health is " + getHeroes(i + 6).Health);
+                    }  if (getHeroes(i + 6).Health <= 0) {
+                        board[i][getHeroes(i + 6).Position] = ' ';
+                        board[i][getHeroes(i+9).Position] = 'K';
+                        displayBoard();
+                    }
+                     if (getHeroes(i + 3).Health > 0 && getHeroes(i + 6).Health <= 0 && board[i][getHeroes(i+9).Position + 1] == 'A' || board[i][getHeroes(i+9).Position + 1] == 'K' ) {
+                        System.out.println("y");
+                        getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i+9).Damage;
+                        System.out.println((i+9) + " attacked " + (i + 3));
+                        System.out.println((i + 3) + " Health is " + getHeroes(i + 3).Health);
+                    }
+                    if(getHeroes(i+3).Health<=0){
+                        board[i][getHeroes(i + 3).Position] = ' ';
+                        getHeroes(i + 3).Damage = 0;
+                        board[i][getHeroes(i+9).Position] = 'K';
+                        displayBoard();
+                    }
+
+                } else if ((getHeroes(i + 3).Health > 0 || getHeroes(i + 6).Health > 0) && getHeroes(i+9).Health > 0) {
+                    getHeroes(i+9).Position++;
+                    board[i][getHeroes(i+9).Position] = 'K';
+                    board[i][getHeroes(i+9).Position - 1] = ' ';
+                    displayBoard();
+                }
+            }
+        }
+    }*/
+    /*
+    public void knightLast22(){
+        if(arrayList.size()>=9){
+            if(getHeroes(i+6).Character=='K'){
+                System.out.println("nm");
+                System.out.println(getHeroes(i+6).Position-1);
+                if((board[i][getHeroes(i+6).Position-1]=='A'|| board[i][getHeroes(i+6).Position-1]=='K'|| board[i][getHeroes(i+6).Position-1]=='>')&& (getHeroes(i).Health>0|| getHeroes(i+9).Health>0) && getHeroes(i+6).Health>0){
+                    System.out.println("bn");
+                    if(getHeroes(i+9).Health>0){
+                        System.out.println("attack");
+                        getHeroes(i+9).Health=getHeroes(i+9).Health-getHeroes(i+6).Damage;
+                        System.out.println((i + 6) + " attacked " + (i + 9));
+                        System.out.println((i + 9) + " Health is " + getHeroes(i + 9).Health);
+
+                    }
+                    if (getHeroes(i + 9).Health <= 0) {
+                        System.out.println("health");
+                        board[i][getHeroes(i + 9).Position] = ' ';
+                        board[i][getHeroes(i+6).Position] = 'K';
+                        displayBoard();
+                    }
+                    if (getHeroes(i).Health > 0 && getHeroes(i +9 ).Health <= 0 &&( board[i][getHeroes(i+6).Position - 1] == 'A' || board[i][getHeroes(i+6).Position - 1] == 'K' )) {
+                        getHeroes(i ).Health = getHeroes(i).Health - getHeroes(i+6).Damage;
+                        System.out.println((i+6) + " attacked " + (i));
+                        System.out.println((i) + " Health is " + getHeroes(i).Health);
+                    }if(getHeroes(i).Health<=0){
+                        System.out.println("heal");
+                        board[i][getHeroes(i ).Position] = ' ';
+                        getHeroes(i ).Damage = 0;
+                        board[i][getHeroes(i+6).Position] = 'K';
+                        displayBoard();
+                    }
+                } else if ((getHeroes(i ).Health > 0 || getHeroes(i + 9).Health > 0) && getHeroes(i+6).Health > 0) {
+                    System.out.println("kj");
+                    getHeroes(i+6).Position--;
+                    board[i][getHeroes(i+6).Position] = 'K';
+                    board[i][getHeroes(i+6).Position +1] = ' ';
+                    displayBoard();
+                }
+            }
+        }
+    }
+    */
+    /*
+    public void archerLastRow() {
+        int why=1;
+        int j=1;
+        int why2=1;
+        int j2=1;
+        if (arrayList.size() >= 9) {
+            if ((getHeroes(i + 3).Character == 'A' || getHeroes(i+6).Character=='A') && (getHeroes(i).Health > 0 ||getHeroes(i+9).Health>0)) {//SECOND
+                System.out.println("Last");
+                    if (getHeroes(i + 6).Health > 0 && getHeroes(i + 9).Health > 0) {
+                        getHeroes(i + 9).Health = getHeroes(i + 9).Health - getHeroes(i + 6).Damage;
+                        System.out.println((i + 6) + " attacked " + (i + 9));
+                        System.out.println((i + 9) + " Health is " + getHeroes(i + 9).Health);
+
+                }if (getHeroes(i + 9).Health <= 0 ) {
+                    board[i][getHeroes(i + 9).Position] = ' ';
+                    displayBoard();
+                }
+                if(getHeroes(i+3).Health>0 && getHeroes(i+6).Health<=0 && getHeroes(i+9).Health>0) {
+                    getHeroes(i+9).Health = getHeroes(i+9).Health - getHeroes(i+3).Damage;
+                    System.out.println((i+3) + " attacked " + (i+9));
+                    System.out.println((i+9 ) + " health is " + getHeroes(i+9).Health);
+                }
+                if(getHeroes(i+9).Health<=0){
+                    board[i][getHeroes(i+9).Position]=' ';
+                    displayBoard();
+
+                }
+                if(getHeroes(i).Health>0 && getHeroes(i+9).Health<=0 && getHeroes(i+6).Health<=0 && getHeroes(i+3).Health>0) {
+                    getHeroes(i).Health = getHeroes(i).Health - getHeroes(i+3).Damage;
+                    System.out.println((i+3) + " attacked " + (i));
+                    System.out.println((i ) + " health is " + getHeroes(i).Health);
+                }
+                if(getHeroes(i).Health<=0){
+                    board[i][getHeroes(i).Position]=' ';
+                    displayBoard();
+                }
+                if(getHeroes(i+6).Health>0 && getHeroes(i).Health>0 && getHeroes(i+9).Health<=0){
+                    getHeroes(i ).Health = getHeroes(i).Health - getHeroes(i+6).Damage;
+                    System.out.println((i+6) + " attacked " + (i));
+                    System.out.println((i) + " health is " + getHeroes(i).Health);
+                }if(getHeroes(i).Health<=0){
+                    board[i][getHeroes(i).Position]=' ';
+                    displayBoard();
+                }
+            }
+
+            }
+        }
+        */
+
+    /*
+    public void archerFirst22(){
+        int why=1;
+        int j=1;
+        int why2=1;
+        int j2=1;
+        if(arrayList.size()>=9){
+            if((getHeroes(i+9).Character=='A'|| getHeroes(i).Character=='A')  && (getHeroes(i + 3).Health > 0 || getHeroes(i + 6).Health > 0)){
+                System.out.println("first");
+                if(getHeroes(i+6).Health>0 && getHeroes(i+9).Health>0 && getHeroes(i+9).Character=='A'){
+                    if(getHeroes(i+9).Character=='A') {
+                        while (why != getHeroes(i + 6).Position - 1) {
+                            board[i][getHeroes(i + 9).Position + j] = '>';
+                            if (j != 1) {
+                                board[i][getHeroes(i + 9).Position + (j - 1)] = ' ';
+                            }
+                            displayBoard();
+                            why++;
+                            j++;
+                        }
+                        board[i][getHeroes(i + 6).Position - 1] = ' ';
+                        getHeroes(i + 6).Health = getHeroes(i + 6).Health - getHeroes(i + 9).Damage;
+                        System.out.println((i + 9) + " attacked " + (i + 6));
+                        System.out.println((i + 6) + " health is " + getHeroes(i + 6).Health);
+                    }
+                }if(getHeroes(i+6).Health <=0){
+                    System.out.println("ss");
+                    board[i][getHeroes(i+6).Position]=' ';
+                    displayBoard();
+                }
+                else if(getHeroes(i+9).Health>0 && getHeroes(i+6).Health<=0 && getHeroes(i+3).Health>0 && getHeroes(i+9).Character=='A'){
+                    getHeroes(i+3).Health=getHeroes(i+3).Health-getHeroes(i+9).Damage;
+                    System.out.println((i + 9) + " attacked " + (i + 3));
+                    System.out.println((i + 3) + " health is " + getHeroes(i + 3).Health);
+                }
+                if(getHeroes(i+3).Health <=0  ){
+                    board[i][getHeroes(i+3).Position]=' ';
+                    displayBoard();
+                }
+                 if(getHeroes(i+3).Health>0 && getHeroes(i+6).Health<=0 && getHeroes(i+9).Health<=0 && getHeroes(i).Health>0){
+                    while (why2!=getHeroes(i+3).Position-1){
+                        board[i][getHeroes(i+9).Position + j2] = '>';
+                        if (j2 != 1) {
+                            board[i][getHeroes(i+9).Position + (j2 - 1)] = ' ';
+                        }
+                        displayBoard();
+                        why2++;
+                        j2++;
+                    }
+                    board[i][getHeroes(i + 3).Position - 1] = ' ';
+                    getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
+
+                     System.out.println(getHeroes(i).Damage);
+                    System.out.println((i) + " attacked " + (i + 3));
+                    System.out.println((i + 3) + " health is " + getHeroes(i + 3).Health);
+                }if(getHeroes(i+3).Health<=0){
+                    board[i][getHeroes(i+3).Position]=' ';
+                    displayBoard();
+                }
+                 if(getHeroes(i).Health>0 && getHeroes(i+9).Health<=0 && getHeroes(i+6).Health>0){
+                     getHeroes(i + 6).Health = getHeroes(i +6).Health - getHeroes(i).Damage;
+                     System.out.println((i) + " attacked " + (i + 6));
+                     System.out.println((i + 6) + " health is " + getHeroes(i + 6).Health);
+                 }if(getHeroes(i+6).Health<=0 && getHeroes(i+6).Position!=getHeroes(i+9).Position){
+                    board[i][getHeroes(i+6).Position]=' ';
+                    displayBoard();
+                }
+            }
+        }
+    }
+    */
+    /*
+
+
+    public void archerFirst2(){
+        int why=0;
+        int j=1;
+        int why2=0;
+        int j2=1;
+        if(arrayList.size()>=9) {
+            if (getHeroes(i).Character == 'A' && getHeroes(i).Health > 0 && (getHeroes(i + 3).Health > 0 || getHeroes(i + 6).Health > 0) && getHeroes(i+9).Health<=0) {//FIRST
+                if (getHeroes(i + 6).Health > 0 && getHeroes(i+9).Health<=0) {
+                    while (why != (getHeroes(i + 6).Position - 1)) {
+                        board[i][getHeroes(i).Position + j] = '>';
+                        if (j != 1) {
+                            board[i][getHeroes(i).Position + (j - 1)] = ' ';
+                        }
+                        displayBoard();
+                        why++;
+                        j++;
+                    }
+                    board[i][getHeroes(i + 6).Position - 1] = ' ';
+
+                    getHeroes(i + 6).Health = getHeroes(i + 6).Health - getHeroes(i).Damage;
+                    System.out.println(i + " attacked " + (i + 6));
+                    System.out.println((i + 6) + " health is " + getHeroes(i + 6).Health);
+                }
+                if (getHeroes(i + 6).Health <= 0) {
+                    getHeroes(i + 6).Damage = 0;
+                    board[i][getHeroes(i + 6).Position] = ' ';
+                    displayBoard();
+                }
+                else if (getHeroes(i + 3).Health > 0 && getHeroes(i + 6).Health <= 0 && getHeroes(i+9).Health<=0) {
+                    while (why2 != (getHeroes(i + 6).Position - 1)) {
+                        board[i][getHeroes(i).Position + j] = '>';
+                        if (j2 != 1) {
+                            board[i][getHeroes(i).Position + (j2 - 1)] = ' ';
+                        }
+                        displayBoard();
+                        why2++;
+                        j2++;
+                    }
+                    board[i][getHeroes(i + 6).Position - 1] = ' ';
+                    getHeroes(i + 3).Health = getHeroes(i + 3).Health - getHeroes(i).Damage;
+                    System.out.println(i + " attacked " + (i + 3));
+                    System.out.println((i + 3) + " health is " + getHeroes(i + 3).Health);
+                }
+                if (getHeroes(i + 3).Health <= 0) {
+                    getHeroes(i).Health = getHeroes(i).Health + 2;
+                    getHeroes(i + 3).Damage = 0;
+                    board[i][getHeroes(i + 3).Position] = ' ';
+                    displayBoard();
+                }
+            }
+        }
+    }
+    */
+     /*
+    public void archerSecondLastRow() {
+        int why = getHeroes(i+6).Position;
+        int j = 1;
+        int why2=getHeroes(i).Position;
+        int j2=1;
+        if (arrayList.size() >= 9) {
+            if (getHeroes(i + 6).Character == 'A' && getHeroes(i + 6).Health > 0 && (getHeroes(i).Health > 0|| getHeroes(i+9).Health>0)) {
+                if(getHeroes(i+9).Health>0) {
+                    while (why != getHeroes(i+9).Position+1) {
+                        board[i][getHeroes(i +6).Position - j] = '<';
+                        if (j != 1) {
+                            board[i][getHeroes(i + 6).Position - (j - 1)] = ' ';
+                        }
+                        displayBoard();
+                        why--;
+                        j++;
+                    }
+                    if(getHeroes(i+9).Position+1!=getHeroes(i+6).Position) {
+                        board[i][getHeroes(i+9).Position + 1] = ' ';
+                    }
+                    getHeroes(i+9).Health=getHeroes(i+9).Health-getHeroes(i+6).Damage;
+                    System.out.println((i + 6) + " attacked " + (i+9));
+                    System.out.println((i+9) + " Health is " + getHeroes(i+9).Health);
+
+                }if(getHeroes(i+9).Health<=0){
+                    board[i][getHeroes(i+9).Position]=' ';
+                    displayBoard();
+                }
+                else if(getHeroes(i+9).Health<=0 && getHeroes(i).Health>0){
+                    while (why2 != getHeroes(i).Position+1) {
+                        board[i][getHeroes(i +6).Position - j] = '<';
+                        if (j != 1) {
+                            board[i][getHeroes(i + 6).Position - (j - 1)] = ' ';
+                        }
+                        displayBoard();
+                        why--;
+                        j++;
+                    }
+                    if(getHeroes(i).Position+1!=getHeroes(i+6).Position) {
+                        board[i][getHeroes(i).Position + 1] = ' ';
+                    }
+                    getHeroes(i).Health=getHeroes(i).Health-getHeroes(i+3).Damage;
+                    System.out.println((i + 6) + " attacked " + (i));
+                    System.out.println((i) + " Health is " + getHeroes(i).Health);
+                }
+                if(getHeroes(i).Health<=0){
+                    board[i][getHeroes(i).Position]=' ';
+                    displayBoard();
+                }
+            }
+
+        }
+    }*/
+    /*
+
+    public void knightSecondLastRow(){
+        if(arrayList.size()==9) {
+            if (getHeroes(i + 6).Character == 'K') {//SECOND
+                if ((board[i][getHeroes(i + 6).Position - 1] == 'A' || board[i][getHeroes(i + 6).Position - 1] == 'K') && getHeroes(i + 6).Health > 0 && getHeroes(i).Health > 0) {
+                    getHeroes(i).Health = getHeroes(i).Health - getHeroes(i + 6).Damage;
+                    System.out.println((i + 6) + " attacked " + (i));
+                    System.out.println((i) + " Health is " + getHeroes(i).Health);
+                    if (getHeroes(i).Health <= 0) {
+                        board[i][getHeroes(i).Position] = ' ';
+                        board[i][getHeroes(i + 6).Position] = 'K';
+                        getHeroes(i).Damage = 0;
+                        displayBoard();
+                    }
+                } else if (getHeroes(i).Health > 0 && getHeroes(i + 6).Health > 0) {
+                    getHeroes(i + 6).Position--;
+                    board[i][getHeroes(i + 6).Position] = 'K';
+                    board[i][getHeroes(i + 6).Position + 1] = ' ';
+                    displayBoard();
+                }
+            }
+        }
+
+    }
+    */
